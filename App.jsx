@@ -1,13 +1,25 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 
-function App() {
-    let test = "test";
+import MessageForm from './MessageForm.jsx'
 
-    return(
-        <p>
-            { test }
-        </p>
-    );
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            test: "test"
+        }
+    }
+
+    render() {
+        return(
+            <div>
+                <p>
+                    { this.state.test }
+                </p>
+                <MessageForm />
+            </div>
+        );
+    }
 }
 
 export default App;
