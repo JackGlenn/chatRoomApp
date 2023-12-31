@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import MessageForm from './MessageForm.jsx'
+import MessageForm from './messageForm.jsx'
 
 class App extends React.Component {
     constructor(props) {

@@ -9,6 +9,7 @@ class MessageForm extends React.Component {
             message: "",
             socket: new WebSocket("ws://localhost:8080")
         }
+        console.log("in constructor");
         this.socketURL = "ws://localhost:8080";
         this.sendMessage = this.sendMessage.bind(this);
         this.sendMessageHandler = this.sendMessageHandler.bind(this);
@@ -75,7 +76,7 @@ class MessageForm extends React.Component {
 
     render() {
         return(
-            <form onSubmit={this.sendMessageHandler}>
+            <form onSubmit={this.sendMessageHandler} className='flex'>
                 <label>Send Message
                     <input type="text" value={this.state.value} onChange={this.handleChange} />
                 </label>
