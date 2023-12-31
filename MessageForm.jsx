@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import React from "react";
+// import React from "react";
 
 
 // class MessageForm extends React.Component {
@@ -92,10 +92,12 @@ function MessageForm() {
         console.log(socket);
         if (socket.readyState === socket.OPEN) {
             socket.send(message);
+            setMessage("");
         } else {
             try {
                 await waitForOpen(socket);
                 socket.send(message);
+                setMessage("");
             } catch (err) {
                 console.error(err);
             }
