@@ -1,10 +1,5 @@
 import { useState } from 'react';
 import React from "react";
-// const socket = new WebSocket(":25
-
-
-
-
 
 
 class MessageForm extends React.Component {
@@ -24,7 +19,7 @@ class MessageForm extends React.Component {
     async sendMessage() {
         console.log(this.state.socket);
         if (this.state.socket.readyState === this.state.socket.OPEN) {
-            socket.send(this.state.message);
+            this.state.socket.send(this.state.message);
         } else {
             try {
                 await this.waitForOpen(this.state.socket);
@@ -44,6 +39,7 @@ class MessageForm extends React.Component {
             // TODO attempt to reconnect if closed, 
             const attempt = () => {
                 console.log(`${i} attempts to open connection`);
+                console.log(this.state.socket.readyState);
                 if (this.state.socket.readyState === this.state.socket.CLOSED) {
                     console.log(`Re-Establishing connection to ${this.state.socket.url}`)
                     this.state.socket = new WebSocket(this.state.socket.url);
