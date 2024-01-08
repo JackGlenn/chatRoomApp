@@ -1,23 +1,34 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
-import MessageForm from './messageForm.jsx'
+import MessageForm from "./messageForm.jsx";
+import TextInput from "./TextInput.jsx";
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            test: "test"
-        }
+            test: "test",
+        };
     }
 
     render() {
-        return(
-            <div>
-                <p>
-                    { this.state.test }
-                </p>
+        return (
+            <main>
+                <div className="messageArea">
+                    <p>line</p>
+                    <p>line</p>
+                    <p>line</p>
+                    <p>line</p>
+                    <p>line</p>
+                    <p>line</p>
+                    <p>line</p>
+                    <p>line</p>
+
+                    {/* <p>{this.state.test}</p>
+                    <MessageForm /> */}
+                </div>
                 <MessageForm />
-            </div>
+            </main>
         );
     }
 }

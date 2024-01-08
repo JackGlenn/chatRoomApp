@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 // import React from "react";
 
 
@@ -85,19 +85,57 @@ import { useState } from 'react';
 //     }
 // }
 function MessageForm() {
+    const textAreaRef = useRef(null);
+    const messageFormRef = useRef(null);
     const [message, setMessage] = useState("");
+    // const [textAreaRows, setTextAreaRows] = useState(1);
+    const textAreaDefaultHeight = 19;
+
     let socket = new WebSocket("ws://localhost:8080");
+
+    const checkSubmit = (event) => {
+        // console.log(event.keyCode);
+        if (event.keyCode === 13 && !event.shiftKey) {
+            // event.preventDefault();
+            // messageFormRef.current.submit();
+            sendMessageHandler(event);
+            // console.log(message);
+        }
+    }
+
+    const handleChange = (event) => {
+        // console.log(`scroll height: ${textAreaRef.current.style.height}`);
+
+        setMessage(event.target.value);
+        // console.log(`message: ${message}`);
+        // console.log(`text area rows: ${event.target.rows}`);
+        // console.log(`text area height: ${event.target.scrollHeight}`);
+        // console.log(`text are cols: ${event.target.cols}`);
+        // console.log(event.target);
+        // TODO make text box shrink in size after sending message
+
+        textAreaRef.current.style.height = "0px";
+        const scrollHeight = textAreaRef.current.scrollHeight;
+
+        textAreaRef.current.style.height = `${scrollHeight}px`;
+        // console.log(`scroll height: ${textAreaRef.current.style.height}`);
+    }
+    window.addEventListener("resize", handleChange);
 
     const sendMessage = async () => {
         console.log(socket);
         if (socket.readyState === socket.OPEN) {
             socket.send(message);
             setMessage("");
+            // TODO get rid of magic number
+            textAreaRef.current.style.height = `${textAreaDefaultHeight}px`;
         } else {
             try {
                 await waitForOpen(socket);
                 socket.send(message);
                 setMessage("");
+                // TODO get rid of magic number 
+                textAreaRef.current.style.height = `${textAreaDefaultHeight}px`;
             } catch (err) {
                 console.error(err);
             }
@@ -109,8 +147,7 @@ function MessageForm() {
             const maxAttempts = 5;
             const delayBetweenAttempts = 100;
             let i = 0;
-    
-            // TODO attempt to reconnect if closed, 
+
             const attempt = () => {
                 console.log(`${i} attempts to open connection`);
                 console.log(socket.readyState);
@@ -139,16 +176,31 @@ function MessageForm() {
         sendMessage(socket, message);
     };
 
-    const messageChange = (event) => {
-        setMessage(event.target.value);
-    }
+    // const messageChange = (event) => {
+    //     setMessage(event.target.value);
+    // }
 
     return(
-        <form onSubmit={(e) => sendMessageHandler(e)} className='flex'>
-            <label>Send Message
-                <input type="text" value={message} onChange={(e) => messageChange(e)} />
-            </label>
-        </form> 
+        <div className="textAreaDiv">
+            {/* <form ref={messageFormRef} onSubmit={(e) => sendMessageHandler(e)}> */}
+            <form ref={messageFormRef}>
+                <textarea
+                    className="textArea"
+                    ref={textAreaRef}
+                    value={message}
+                    onChange={handleChange}
+                    onKeyDown={checkSubmit}
+                    rows={1}
+                />
+                {/* <input type="submit" value="Submit"/> */}
+            </form>
+        </div>
+        // <form onSubmit={(e) => sendMessageHandler(e)} className='textAreaForm'>
+        //     <label>Send Message
+        //         <textarea class="messageBox" rows="1" value={message} onChange={(e) => messageChange(e)} />
+        //     </label>
+        //     <input type="submit" value="Submit"/>
+        // </form> 
     );
 }
 

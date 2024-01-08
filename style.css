@@ -1,24 +1,35 @@
 :root {
+    font-size: 20px;
     --color1: #242582;
     --color2: #553D67;
     --color3: #F64C72;
     --color4: #99738E;
     --color5: #2F2FA2;
+    --color6: #b6b6b6;
+    --color7: #ececec;
 }
 
 * {
-    background-color: var(--color1);
+    background-color: var(--color5);
 }
 
-input[type="text"], textarea {
+body {
+    margin: 0;
+    padding: 0;
+    /* overflow: hidden; */
+}
 
-    background-color : #d1d1d1; 
+input[type="textarea"], input[type="submit"], textarea {
+
+    background-color : white; 
     /* position: relative;  */
     /* outline: none; 
     white-space: pre-wrap; 
     overflow-wrap: break-word; */
     width: inherit;
     height: inherit;
+    resize: vertical;
+    width:15%;
 }
 
 .flex {
@@ -31,22 +42,55 @@ input[type="text"], textarea {
     outline: none; 
     white-space: pre-wrap; 
     overflow-wrap: break-word;
-    width: 75%;
-    height: 25%;
+    /* width: 75%; */
+    /* height: 25%; */
 }
 
 label {
     width: 75%;
-    height: 25%; 
+    height: 25%;
 }
 
 .entry {
-    position: relative;
+    /* position: relative; */
     /* top: 0;
     left: 0;
     bottom: 0;
     right: 0;
     overflow: auto; */
     width: 100%;
-    height: 100%; 
+    height: 100%;
+}
+
+p {
+    color: var(--color3)
+}
+
+.messageArea {
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    /* align-items: center; */
+    overflow: scroll;
+    margin-left: 5rem;
+}
+
+/* .messageArea:last-child {
+    margin-top: auto;
+} */
+
+
+.textAreaDiv {
+    /* margin-top: auto; */
+    margin-left: 5rem;
+    margin-right: 5rem;
+}
+
+.textArea {
+    /* margin-top: auto; */
+    width: 100%;
+    resize: none;
+    /* margin-left: 5rem;
+    margin-right: 5rem; */
+    /* position: fixed; */
 }
