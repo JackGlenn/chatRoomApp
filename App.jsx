@@ -12,7 +12,7 @@ function App() {
     }
 
     const list = messageList.map((val) => (
-        <p>{val}</p>
+        <p className="message">{val}</p>
     ));
 
     return(

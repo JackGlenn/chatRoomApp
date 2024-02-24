@@ -19,6 +19,10 @@ body {
     /* overflow: hidden; */
 }
 
+.message {
+    white-space: pre-line;
+}
+
 input[type="textarea"], input[type="submit"], textarea {
 
     background-color : white; 
