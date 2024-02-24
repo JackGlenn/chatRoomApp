@@ -1,36 +1,28 @@
 import React, { useState } from "react";
 
 import MessageForm from "./messageForm.jsx";
-import TextInput from "./TextInput.jsx";
 
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            test: "test",
-        };
+function App() {
+    const [messageList, setMessageList] = useState([]);
+
+    const dataTransfer = (message) => {
+        console.log("in data transfer");
+        console.log(message);
+        setMessageList([...messageList, message])
     }
 
-    render() {
-        return (
-            <main>
-                <div className="messageArea">
-                    <p>line</p>
-                    <p>line</p>
-                    <p>line</p>
-                    <p>line</p>
-                    <p>line</p>
-                    <p>line</p>
-                    <p>line</p>
-                    <p>line</p>
+    const list = messageList.map((val) => (
+        <p>{val}</p>
+    ));
 
-                    {/* <p>{this.state.test}</p>
-                    <MessageForm /> */}
-                </div>
-                <MessageForm />
-            </main>
-        );
-    }
+    return(
+        <main>
+            <div className="messageArea">
+                {list}
+            </div>
+            <MessageForm dataTransfer={dataTransfer}/>
+        </main>
+    )
 }
 
 export default App;
