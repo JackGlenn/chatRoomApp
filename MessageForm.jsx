@@ -7,7 +7,9 @@ function MessageForm({dataTransfer}) {
     const [message, setMessage] = useState("");
     const textAreaDefaultHeight = 19;
 
-    let socket = new WebSocket("ws://10.0.2.203:8080");
+    // Todo: Make this socket connection based on hooks,
+    // Todo: Currently reconnects to the websocket on every load.
+    let socket = new WebSocket($(process.env.WSADDR));
 
     const checkSubmit = (event) => {
         console.log(event.keyCode);

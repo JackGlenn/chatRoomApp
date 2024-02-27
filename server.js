@@ -3,10 +3,10 @@ import url from "url";
 import WebSocket, { WebSocketServer } from 'ws';
 
 const app = express();
-const port = 8000
+const port = $(process.env.PORT);
 const root = url.fileURLToPath(new URL('.', import.meta.url));
 
-const wsServer = new WebSocketServer({port: 8080})
+const wsServer = new WebSocketServer({port: $(process.env.WSPORT)})
 
 wsServer.on('connection', socket => {
     socket.on('message', message=> {
