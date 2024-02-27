@@ -9,7 +9,7 @@ function MessageForm({dataTransfer}) {
 
     // Todo: Make this socket connection based on hooks,
     // Todo: Currently reconnects to the websocket on every load.
-    let socket = new WebSocket($(process.env.WSADDR));
+    let socket = new WebSocket("ws://" + location.hostname + ":8080");
 
     const checkSubmit = (event) => {
         console.log(event.keyCode);

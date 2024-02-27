@@ -1,12 +1,14 @@
 import express from "express";
 import url from "url";
 import WebSocket, { WebSocketServer } from 'ws';
+import 'dotenv/config'
+
 
 const app = express();
-const port = $(process.env.PORT);
+const port = process.env.PORT;
 const root = url.fileURLToPath(new URL('.', import.meta.url));
 
-const wsServer = new WebSocketServer({port: $(process.env.WSPORT)})
+const wsServer = new WebSocketServer({port: process.env.WSPORT})
 
 wsServer.on('connection', socket => {
     socket.on('message', message=> {

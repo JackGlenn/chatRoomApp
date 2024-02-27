@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import MessageForm from "./messageForm.jsx";
+import MessageForm from "./MessageForm.jsx";
 
 function App() {
     const [messageList, setMessageList] = useState([]);
