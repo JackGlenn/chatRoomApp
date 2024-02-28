@@ -30,7 +30,11 @@ function MessageForm({dataTransfer}) {
     const sendMessage = async () => {
         console.log(socket);
         if (socket.readyState === socket.OPEN) {
-            socket.send(message);
+            let toSend = {
+                "message": message,
+                "timestamp": new Date().toISOString()
+            }
+            socket.send(JSON.stringify(toSend));
             dataTransfer(message);
             setMessage("");
             // TODO get rid of magic number
@@ -38,7 +42,11 @@ function MessageForm({dataTransfer}) {
         } else {
             try {
                 await waitForOpen(socket);
-                socket.send(message);
+                let toSend = {
+                    "message": message,
+                    "timestamp": new Date().toISOString()
+                }
+                socket.send(JSON.stringify(toSend));
                 dataTransfer(message);
                 setMessage("");
                 // TODO get rid of magic number 
