@@ -43,6 +43,8 @@ wsServer.on('connection', socket => {
     socket.on('message', message=> {
         console.log(`Received message ${message}`)
         insertMessage(message);
+        // TODO remove later
+        socket.send("received message from client:"  + message);
     })
 })
 

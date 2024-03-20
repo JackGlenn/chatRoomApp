@@ -1,4 +1,6 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
+// import { WSContext } from './WebSocketProvider';
+import { useSocket } from './WebSocketProvider';
 
 
 function MessageForm({dataTransfer}) {
@@ -7,12 +9,16 @@ function MessageForm({dataTransfer}) {
     const [message, setMessage] = useState("");
     const textAreaDefaultHeight = 19;
 
+    // console.log("connecting to ws");
     // Todo: Make this socket connection based on hooks,
     // Todo: Currently reconnects to the websocket on every load.
-    let socket = new WebSocket("ws://" + location.hostname + ":8080");
+    // let socket = new WebSocket("ws://" + location.hostname + ":8080");
+    let socket = useSocket();
+    console.log("grabbed ref to socket");
+
 
     const checkSubmit = (event) => {
-        console.log(event.keyCode);
+        // console.log(event.keyCode);
         if (event.keyCode === 13 && !event.shiftKey) {
             sendMessageHandler(event);
         }
@@ -28,8 +34,9 @@ function MessageForm({dataTransfer}) {
     window.addEventListener("resize", handleChange);
 
     const sendMessage = async () => {
-        console.log(socket);
+        console.log("in send Message");
         if (socket.readyState === socket.OPEN) {
+            console.log("socket ready state open: ", socket.readyState);
             let toSend = {
                 "message": message,
                 "timestamp": new Date().toISOString()
@@ -58,6 +65,7 @@ function MessageForm({dataTransfer}) {
     }
 
     const waitForOpen = () => {
+        console.log("in wait for open");
         return new Promise((resolve, reject) => {
             const maxAttempts = 5;
             const delayBetweenAttempts = 100;
