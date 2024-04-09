@@ -33,18 +33,54 @@ async function insertMessage(message) {
     // console.log(currentUser);
 };
 
+async function loadTenMessages(socket) {
+    // console.log()
+    // select most recent 10:
+    // SELECT message, posttime FROM messages ORDER BY posttime DESC LIMIT 10;
+
+    // select most recent 10 past num:
+    // SELECT message, posttime FROM messages ORDER BY posttime DESC LIMIT 10 OFFSET 10;
+
+
+    // get ten messages more recent than timestamp 
+    // SELECT message, posttime FROM messages WHERE posttime > '2024-03-20 19:56:46.423' ORDER BY posttime DESC LIMIT 10;
+    // swapping to < gives ten messages older than timestamp
+    // Potentially make <= and filter out specific post searching by to allow for multiple messages with exact same timestamp,
+        // would need primary key of message to guarantee filtering is accurate.
+        // compare to searching by posts via primarykey 
+    
+
+    const res = await pool.query(
+        "SELECT message, posttime FROM messages ORDER BY posttime DESC LIMIT 10;"
+    )
+    // console.log(res);
+    console.log(JSON.stringify(res.rows))
+    socket.send(JSON.stringify(res.rows));
+    // socket.send("check");
+}
+
 const app = express();
 const port = process.env.PORT;
 const root = url.fileURLToPath(new URL('.', import.meta.url));
 
 const wsServer = new WebSocketServer({port: process.env.WSPORT})
 
+let clients = []
+
 wsServer.on('connection', socket => {
+    loadTenMessages(socket);
+    clients.push(socket)
     socket.on('message', message=> {
         console.log(`Received message ${message}`)
         insertMessage(message);
         // TODO remove later
-        socket.send("received message from client:"  + message);
+        let messageArray = []
+        messageArray.push(JSON.parse(message));
+        let toSend = JSON.stringify(messageArray);
+        for (let i = 0; i < clients.length; i++) {
+            console.log(toSend);
+            clients[i].send(toSend);
+        }
     })
 })
 
@@ -62,3 +98,5 @@ app.get("/", (request, response) => {
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 })
+
+// loadTenMessages()
