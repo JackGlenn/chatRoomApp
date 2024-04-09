@@ -14,8 +14,21 @@ function MessageForm({dataTransfer}) {
     // Todo: Currently reconnects to the websocket on every load.
     // let socket = new WebSocket("ws://" + location.hostname + ":8080");
     let socket = useSocket();
-    console.log("grabbed ref to socket");
+    // console.log("grabbed ref to socket");
 
+    const messageReceiver = (message) => {
+        console.log(typeof(message.data));
+        console.log("message data: " + message.data);
+        let messageArray = JSON.parse(message.data);
+        let newArray = []
+        for (let i = 0; i < messageArray.length; i++) {
+            newArray.push(messageArray[i]["message"]);
+        }
+        console.log(newArray);
+        // Reverse as most recent is on top in sent arrays
+        dataTransfer(newArray.reverse());
+    }
+    socket.addEventListener("message", messageReceiver);
 
     const checkSubmit = (event) => {
         // console.log(event.keyCode);
@@ -42,7 +55,7 @@ function MessageForm({dataTransfer}) {
                 "timestamp": new Date().toISOString()
             }
             socket.send(JSON.stringify(toSend));
-            dataTransfer(message);
+            // dataTransfer(message);
             setMessage("");
             // TODO get rid of magic number
             textAreaRef.current.style.height = `${textAreaDefaultHeight}px`;
@@ -54,7 +67,7 @@ function MessageForm({dataTransfer}) {
                     "timestamp": new Date().toISOString()
                 }
                 socket.send(JSON.stringify(toSend));
-                dataTransfer(message);
+                // dataTransfer(message);
                 setMessage("");
                 // TODO get rid of magic number 
                 textAreaRef.current.style.height = `${textAreaDefaultHeight}px`;
@@ -76,12 +89,14 @@ function MessageForm({dataTransfer}) {
                 console.log(socket.readyState);
                 if (socket.readyState === socket.CLOSED) {
                     console.log(`Re-Establishing connection to ${socket.url}`)
+                    socket.close();
                     socket = new WebSocket(socket.url);
                 }
                 setTimeout(() => {
                     if (socket.readyState === socket.OPEN) {
                         resolve();
                     } else if (i < maxAttempts) {
+                        socket.close();
                         i++;
                         attempt();
                     } else {

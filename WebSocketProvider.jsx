@@ -1,28 +1,28 @@
-import {createContext, useRef, useEffect, useContext} from 'react';
+import {createContext, useRef, useEffect, useContext, useState} from 'react';
 
-
-const WSContext = createContext(new WebSocket("ws://" + location.hostname + ":8080"));
+const socketURL = "ws://" + location.hostname + ":8080";
+const ws = new WebSocket(socketURL)
+const WSContext = createContext(ws);
 
 export const WSProvider = ({children}) => {
-    // console.log("ws://" + location.hostname + ":8080");
-    console.log("in WSProvider")
-    // const socket = useRef(new WebSocket("ws://" + location.hostname + ":8080"));
-    const socket = useContext(WSContext);
-    // useEffect(() => {
-    //     socket.current.addEventListener("open", (event) => {
-    //         console.log("connection made");
-    //         let message = "testing connection";
-    //         let toSend = {
-    //             "message": message,
-    //             "timestamp": new Date().toISOString()
-    //         }
-    //         socket.current.send(JSON.stringify(toSend));
-    //     })
-    //     //  Dismounting
-    //     return () => {
-    //         console.log("dismounting ws");
-    //     }
-    // }, []);
+    const [socket, setSocket] = useState(useContext(WSContext));
+
+    useEffect(() => {
+        const onClose = () => {
+            setTimeout(() => {
+                console.log("on close in websocket use effect called");
+                setSocket(new WebSocket(socketURL));
+            }, 100);
+        }
+
+        socket.addEventListener("close", onClose);
+        //  Dismounting
+        return () => {
+            console.log("socket closing on dismount");
+            socket.removeEventListener("close", onClose);
+            socket.close();
+        }
+    }, [socket, setSocket]);
 
     return (
         <WSContext.Provider value={socket}>{children}</WSContext.Provider>
@@ -32,16 +32,5 @@ export const WSProvider = ({children}) => {
 
 export const useSocket = () => {
     const socket = useContext(WSContext);
-    console.log("socket: ", socket)
-    console.log(typeof(socket));
-
-    // useEffect(() => {
-    //     console.log("adding WS listener", eventName);
-    //     socket.addEventListener(eventName, eventHandler);
-
-    //     return () => {
-    //         console.log("socketSub dismounting");
-    //     }
-    // }, [eventHandler]);
     return socket;
 }
