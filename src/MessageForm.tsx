@@ -1,11 +1,16 @@
-import { useState, useRef, useContext } from 'react';
+import { useState, useRef , KeyboardEvent, ChangeEvent} from 'react';
 // import { WSContext } from './WebSocketProvider';
-import { useSocket } from './WebSocketProvider';
+import { useSocket } from './WebSocketProvider.tsx';
 
+import { Textarea } from "@/components/ui/textarea";
 
-function MessageForm({dataTransfer}) {
-    const textAreaRef = useRef(null);
-    const messageFormRef = useRef(null);
+interface dataTransferProp {
+    dataTransfer: (message: string[]) => void;
+}
+
+function MessageForm({dataTransfer}: dataTransferProp) {
+    const textAreaRef = useRef<HTMLTextAreaElement>(null);
+    const messageFormRef = useRef<HTMLFormElement>(null);
     const [message, setMessage] = useState("");
     const textAreaDefaultHeight = 19;
 
@@ -16,11 +21,11 @@ function MessageForm({dataTransfer}) {
     let socket = useSocket();
     // console.log("grabbed ref to socket");
 
-    const messageReceiver = (message) => {
+    const messageReceiver = (message: MessageEvent) => {
         console.log(typeof(message.data));
         console.log("message data: " + message.data);
-        let messageArray = JSON.parse(message.data);
-        let newArray = []
+        const messageArray = JSON.parse(message.data);
+        const newArray = []
         for (let i = 0; i < messageArray.length; i++) {
             newArray.push(messageArray[i]["message"]);
         }
@@ -30,27 +35,32 @@ function MessageForm({dataTransfer}) {
     }
     socket.addEventListener("message", messageReceiver);
 
-    const checkSubmit = (event) => {
+    const checkSubmit = (event: KeyboardEvent) => {
         // console.log(event.keyCode);
+        // TODO remove deprecated KeyboardEvent.keyCode
         if (event.keyCode === 13 && !event.shiftKey) {
-            sendMessageHandler(event);
+            // sendMessageHandler(event);
+            sendMessage();
         }
     }
 
-    const handleChange = (event) => {
+    const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        if (!event.target) throw Error("event target is null in handle change");
         setMessage(event.target.value);
         // TODO make text box shrink in size after sending message
+        if (!textAreaRef.current) throw Error("text area ref is not assigned");
         textAreaRef.current.style.height = "0px";
         const scrollHeight = textAreaRef.current.scrollHeight;
         textAreaRef.current.style.height = `${scrollHeight}px`;
     }
-    window.addEventListener("resize", handleChange);
+    // TODO make this work
+    // window.addEventListener("resize", handleChange);
 
     const sendMessage = async () => {
         console.log("in send Message");
         if (socket.readyState === socket.OPEN) {
             console.log("socket ready state open: ", socket.readyState);
-            let toSend = {
+            const toSend = {
                 "message": message,
                 "timestamp": new Date().toISOString()
             }
@@ -58,11 +68,12 @@ function MessageForm({dataTransfer}) {
             // dataTransfer(message);
             setMessage("");
             // TODO get rid of magic number
+            if (!textAreaRef.current) throw Error("text area ref not assigned in send message");
             textAreaRef.current.style.height = `${textAreaDefaultHeight}px`;
         } else {
             try {
-                await waitForOpen(socket);
-                let toSend = {
+                await waitForOpen();
+                const toSend = {
                     "message": message,
                     "timestamp": new Date().toISOString()
                 }
@@ -70,6 +81,7 @@ function MessageForm({dataTransfer}) {
                 // dataTransfer(message);
                 setMessage("");
                 // TODO get rid of magic number 
+                if (!textAreaRef.current) throw Error("text area ref not assigned in send message 2");
                 textAreaRef.current.style.height = `${textAreaDefaultHeight}px`;
             } catch (err) {
                 console.error(err);
@@ -94,7 +106,8 @@ function MessageForm({dataTransfer}) {
                 }
                 setTimeout(() => {
                     if (socket.readyState === socket.OPEN) {
-                        resolve();
+                        // TODO check if having null here is fine, originally had it empty
+                        resolve(null);
                     } else if (i < maxAttempts) {
                         socket.close();
                         i++;
@@ -108,11 +121,11 @@ function MessageForm({dataTransfer}) {
         })
     };
 
-    const sendMessageHandler = (event) => {
-        event.preventDefault();
-        console.log(`tying to send: ${message}`);
-        sendMessage(socket, message);
-    };
+    // const sendMessageHandler = (event) => {
+    //     event.preventDefault();
+    //     console.log(`tying to send: ${message}`);
+    //     sendMessage(socket, message);
+    // };
 
     return(
         <div className="textAreaDiv">
@@ -128,6 +141,7 @@ function MessageForm({dataTransfer}) {
                 />
                 {/* <input type="submit" value="Submit"/> */}
             </form>
+            <Textarea />
         </div>
     );
 }

@@ -1,12 +1,20 @@
 import express from "express";
-import url from "url";
-import WebSocket, { WebSocketServer } from 'ws';
+// import url from "url";
+import { WebSocket, WebSocketServer } from 'ws';
+import path from "path";
 // import Pool from 'pg';
 import 'dotenv/config'
 
+// dotenv.config({path:`${__dirname}/.env`});
+
+// require('dotenv').config({ path: '/custom/path/to/.env' })
+
+import { fileURLToPath } from 'url'
+
+
 import pg from "pg";
 const { Pool } = pg;
- 
+
 const pool = new Pool({
   host: 'localhost',
   user: process.env.USER,
@@ -17,7 +25,7 @@ const pool = new Pool({
 });
 
 console.log(process.env.USER);
-async function insertMessage(message) {
+async function insertMessage(message: string) {
     // Date.now()
     // const client = await pool.connect();
 
@@ -31,9 +39,9 @@ async function insertMessage(message) {
     // const currentUser = rows[0]["current_user"];
     // INSERT INTO product VALUES(DEFAULT, 'Apple, Fuji', '4131');
     // console.log(currentUser);
-};
+}
 
-async function loadTenMessages(socket) {
+async function loadTenMessages(socket: WebSocket) {
     // console.log()
     // select most recent 10:
     // SELECT message, posttime FROM messages ORDER BY posttime DESC LIMIT 10;
@@ -59,24 +67,32 @@ async function loadTenMessages(socket) {
     // socket.send("check");
 }
 
+
+const __filename = fileURLToPath(import.meta.url)
+const root = path.dirname(__filename)
+
+console.log(root);
+
 const app = express();
 const port = process.env.PORT;
-const root = url.fileURLToPath(new URL('.', import.meta.url));
+// const root = url.fileURLToPath(new URL('.', import.meta.url));
+// const root = path.join(__dirname)
 
-const wsServer = new WebSocketServer({port: process.env.WSPORT})
+const wsServer = new WebSocketServer({port: parseInt(process.env.WSPORT!)})
 
-let clients = []
+const clients : WebSocket[] = [];
 
 wsServer.on('connection', socket => {
     loadTenMessages(socket);
     clients.push(socket)
-    socket.on('message', message=> {
+    socket.on('message', message => {
+        const convertedMessage: string = message.toString();
         console.log(`Received message ${message}`)
-        insertMessage(message);
+        insertMessage(convertedMessage);
         // TODO remove later
-        let messageArray = []
-        messageArray.push(JSON.parse(message));
-        let toSend = JSON.stringify(messageArray);
+        const messageArray : string[]  = [];
+        messageArray.push(JSON.parse(convertedMessage));
+        const toSend = JSON.stringify(messageArray);
         for (let i = 0; i < clients.length; i++) {
             console.log(toSend);
             clients[i].send(toSend);
@@ -93,6 +109,7 @@ app.get("/", (request, response) => {
     };
     // console.log("here");
     response.sendFile("./dist/index.html", options)
+    console.log(request);
 })
 
 app.listen(port, () => {

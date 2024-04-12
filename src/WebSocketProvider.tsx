@@ -1,10 +1,14 @@
-import {createContext, useRef, useEffect, useContext, useState} from 'react';
+import {createContext, useEffect, useContext, useState} from 'react';
 
 const socketURL = "ws://" + location.hostname + ":8080";
 const ws = new WebSocket(socketURL)
 const WSContext = createContext(ws);
 
-export const WSProvider = ({children}) => {
+interface childProp {
+    children: React.ReactNode
+}
+
+export const WSProvider = ({children}: childProp) => {
     const [socket, setSocket] = useState(useContext(WSContext));
 
     useEffect(() => {
