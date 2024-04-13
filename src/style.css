@@ -74,6 +74,7 @@
       
       word-wrap: break-word;
       margin-left: 5rem;
+      padding-right: 5rem;
       /* margin-right: 5rem; */
     }
 
@@ -104,7 +105,7 @@
     } */
 
     .message {
-      @apply flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm bg-primary text-primary-foreground;
+      @apply flex w-max max-w-[100%] flex-col gap-2 rounded-lg px-3 py-2 text-sm bg-primary text-primary-foreground;
       white-space: pre-line;
       /* margin-right: 3rem; */
     }
