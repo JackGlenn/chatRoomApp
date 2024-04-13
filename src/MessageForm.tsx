@@ -1,4 +1,4 @@
-import { useState, useRef , KeyboardEvent, ChangeEvent} from 'react';
+import { useState, useRef , KeyboardEvent, ChangeEvent, useEffect} from 'react';
 // import { WSContext } from './WebSocketProvider';
 import { useSocket } from './WebSocketProvider.tsx';
 
@@ -11,8 +11,9 @@ interface dataTransferProp {
 function MessageForm({dataTransfer}: dataTransferProp) {
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
     const messageFormRef = useRef<HTMLFormElement>(null);
+    const textAreaScrollRef = useRef<HTMLDivElement>(null);
     const [message, setMessage] = useState("");
-    const textAreaDefaultHeight = 19;
+    const textAreaDefaultHeight = 36;
 
     // console.log("connecting to ws");
     // Todo: Make this socket connection based on hooks,
@@ -20,6 +21,14 @@ function MessageForm({dataTransfer}: dataTransferProp) {
     // let socket = new WebSocket("ws://" + location.hostname + ":8080");
     let socket = useSocket();
     // console.log("grabbed ref to socket");
+
+    // TODO make this scrolling better
+    useEffect(() => {
+        // if (!textAreaScrollRef.current) throw Error("text are scroll ref not assigned")
+        // textAreaScrollRef.current.scrollIntoView({ behavior: "smooth"});
+        // console.log("here")
+        window.scrollTo(0, document.body.scrollHeight);
+    },);
 
     const messageReceiver = (message: MessageEvent) => {
         console.log(typeof(message.data));
@@ -40,6 +49,7 @@ function MessageForm({dataTransfer}: dataTransferProp) {
         // TODO remove deprecated KeyboardEvent.keyCode
         if (event.keyCode === 13 && !event.shiftKey) {
             // sendMessageHandler(event);
+            event.preventDefault();
             sendMessage();
         }
     }
@@ -49,9 +59,11 @@ function MessageForm({dataTransfer}: dataTransferProp) {
         setMessage(event.target.value);
         // TODO make text box shrink in size after sending message
         if (!textAreaRef.current) throw Error("text area ref is not assigned");
+        console.log("height: ", textAreaRef.current.offsetHeight)
         textAreaRef.current.style.height = "0px";
         const scrollHeight = textAreaRef.current.scrollHeight;
         textAreaRef.current.style.height = `${scrollHeight}px`;
+
     }
     // TODO make this work
     // window.addEventListener("resize", handleChange);
@@ -131,17 +143,24 @@ function MessageForm({dataTransfer}: dataTransferProp) {
         <div className="textAreaDiv">
             {/* <form ref={messageFormRef} onSubmit={(e) => sendMessageHandler(e)}> */}
             <form ref={messageFormRef}>
-                <textarea
-                    className="textArea"
+                <Textarea
                     ref={textAreaRef}
                     value={message}
                     onChange={handleChange}
                     onKeyDown={checkSubmit}
                     rows={1}
                 />
+                {/* <textarea
+                    className="textArea"
+                    ref={textAreaRef}
+                    value={message}
+                    onChange={handleChange}
+                    onKeyDown={checkSubmit}
+                    rows={1}
+                /> */}
                 {/* <input type="submit" value="Submit"/> */}
             </form>
-            <Textarea />
+            <div ref={textAreaScrollRef}></div>
         </div>
     );
 }

@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from "react";
 
 import MessageForm from "./MessageForm.tsx";
 import { WSProvider } from "./WebSocketProvider.tsx";
+import { ThemeProvider } from "@/components/theme-provider.tsx";
+import { ModeToggle } from "./components/ui/mode-toggle.tsx";
 
 // import TestComponent from "./TestComponent.jsx";
 
@@ -30,7 +32,7 @@ function App() {
         if (atBottomBool) {
             console.log("should scroll");
             if (!messageAreaBottomRef.current) throw Error("messageAreaBottomRef is not assigned");
-            messageAreaBottomRef.current.scrollIntoView({ behavior: "smooth"});
+            messageAreaBottomRef.current.scrollIntoView({ block:"end", inline:"nearest", behavior: "smooth"});
         }
     };
 
@@ -39,18 +41,21 @@ function App() {
     },);
 
     const list = messageList.map((val) => (
-        <p className="message">{val}</p>
+        <div className="message">{val}</div>
     ));
 
     return(
         <main>
+            <ThemeProvider>
             <WSProvider>
+            <ModeToggle/>
             <div className="messageArea" ref={messageAreaRef}>
                 {list}
                 <div ref={messageAreaBottomRef} />
             </div>
             <MessageForm dataTransfer={dataTransfer}/>
             </WSProvider>
+            </ThemeProvider>
         </main>
     )
 }
