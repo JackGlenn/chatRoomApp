@@ -49,23 +49,30 @@
       --ring: 346.8 77.2% 49.8%;
     }
   }
-  
+
 
   @layer base {
     * {
       @apply border-border;
     }
     body {
-      @apply bg-background text-foreground;
+      /* @apply bg-background text-foreground; */
+      @apply bg-card text-foreground;
+
       margin: 0;
       padding: 0;
+    }
+
+    .topBar {
+      height: 10vh;
     }
 
     .messageArea {
       @apply space-y-4;
       display: flex;
       flex-direction: column;
-      /* justify-content: center; */
+      justify-content: center;
+      margin: auto;
       /* position: relative; */
       /* align-items: center; */
       height: 80vh;
@@ -73,25 +80,29 @@
       /* overflow-x: clip; */
       
       word-wrap: break-word;
-      margin-left: 5rem;
-      padding-right: 5rem;
+      width: 80%
       /* margin-right: 5rem; */
     }
 
+    .messageForm {
+      flex-grow: 1;
+    }
+
     .textAreaDiv {
-      height: 10%;
+      display: flex;
+      justify-content: center;
+      /* flex-grow: 1; */
+      align-items: center;
+      /* height: 10vh; */
+      height: 10vh;
+      width: 80%;
+      margin: auto;
+/* 
       margin-top: 2rem;
       margin-left: 5rem;
       margin-right: 5rem;
-      /* margin-bottom: 2rem; */
-      padding-bottom: 2rem;
+      padding-bottom: 2rem; */
 
-    }
-
-    .messageForm {
-      /* margin-top: 5rem; */
-      margin-bottom: 5rem;
-      /* padding-bottom: 5rem; */
     }
 
     .entry {
