@@ -5,12 +5,7 @@ import path from "path";
 // import Pool from 'pg';
 import 'dotenv/config'
 
-// dotenv.config({path:`${__dirname}/.env`});
-
-// require('dotenv').config({ path: '/custom/path/to/.env' })
-
 import { fileURLToPath } from 'url'
-
 
 import pg from "pg";
 const { Pool } = pg;
@@ -30,12 +25,16 @@ async function insertMessage(message: string) {
     // const client = await pool.connect();
 
     const obj = JSON.parse(message);
+    console.log("before insert message")
+    console.log(obj);
+    console.log(obj.message_text, obj.time_stamp);
     const res = await pool.query(
-        "INSERT INTO messages VALUES(DEFAULT, $1, $2) RETURNING *",
+        "INSERT INTO messages VALUES(DEFAULT, $1, $2, $3, $4) RETURNING *",
         // "SELECT current_database()",
-        [obj.message, obj.timestamp]
+        [obj.message_text, obj.time_stamp, 1, 1]
     );
     console.log(res.rows[0]);
+    console.log("here 3")
     // const currentUser = rows[0]["current_user"];
     // INSERT INTO product VALUES(DEFAULT, 'Apple, Fuji', '4131');
     // console.log(currentUser);
@@ -56,14 +55,15 @@ async function loadTenMessages(socket: WebSocket) {
     // Potentially make <= and filter out specific post searching by to allow for multiple messages with exact same timestamp,
         // would need primary key of message to guarantee filtering is accurate.
         // compare to searching by posts via primarykey 
-    
 
     const res = await pool.query(
-        "SELECT message, posttime FROM messages ORDER BY posttime DESC LIMIT 10;"
+        "SELECT message_text, post_time FROM messages ORDER BY post_time DESC LIMIT 10;"
     )
     // console.log(res);
     console.log(JSON.stringify(res.rows))
+    console.log("here 1")
     socket.send(JSON.stringify(res.rows));
+    console.log("here 2");
     // socket.send("check");
 }
 
@@ -90,7 +90,7 @@ wsServer.on('connection', socket => {
         console.log(`Received message ${message}`)
         insertMessage(convertedMessage);
         // TODO remove later
-        const messageArray : string[]  = [];
+        const messageArray: string[] = [];
         messageArray.push(JSON.parse(convertedMessage));
         const toSend = JSON.stringify(messageArray);
         for (let i = 0; i < clients.length; i++) {
@@ -109,7 +109,6 @@ app.get("/", (request, response) => {
     };
     // console.log("here");
     response.sendFile("./dist/index.html", options)
-    console.log(request);
 })
 
 app.listen(port, () => {
@@ -117,3 +116,7 @@ app.listen(port, () => {
 })
 
 // loadTenMessages()
+
+// TODO 
+// Create user, query user id from username for sending when sending a message
+// Create server 

@@ -36,7 +36,7 @@ function MessageForm({dataTransfer}: dataTransferProp) {
         const messageArray = JSON.parse(message.data);
         const newArray = []
         for (let i = 0; i < messageArray.length; i++) {
-            newArray.push(messageArray[i]["message"]);
+            newArray.push(messageArray[i]["message_text"]);
         }
         console.log(newArray);
         // Reverse as most recent is on top in sent arrays
@@ -73,8 +73,8 @@ function MessageForm({dataTransfer}: dataTransferProp) {
         if (socket.readyState === socket.OPEN) {
             console.log("socket ready state open: ", socket.readyState);
             const toSend = {
-                "message": message,
-                "timestamp": new Date().toISOString()
+                "message_text": message,
+                "time_stamp": new Date().toISOString()
             }
             socket.send(JSON.stringify(toSend));
             // dataTransfer(message);
@@ -86,8 +86,8 @@ function MessageForm({dataTransfer}: dataTransferProp) {
             try {
                 await waitForOpen();
                 const toSend = {
-                    "message": message,
-                    "timestamp": new Date().toISOString()
+                    "message_text": message,
+                    "time_stamp": new Date().toISOString()
                 }
                 socket.send(JSON.stringify(toSend));
                 // dataTransfer(message);
@@ -142,7 +142,7 @@ function MessageForm({dataTransfer}: dataTransferProp) {
     return(
         <div className="textAreaDiv">
             {/* <form ref={messageFormRef} onSubmit={(e) => sendMessageHandler(e)}> */}
-            <form ref={messageFormRef}>
+            <form ref={messageFormRef} className="messageForm">
                 <Textarea
                     ref={textAreaRef}
                     value={message}
