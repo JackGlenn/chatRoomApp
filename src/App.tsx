@@ -49,7 +49,9 @@ function App() {
             <ThemeProvider>
             <WSProvider>
             <div className="topBar">
+                <div className="modeToggle">
                 <ModeToggle/>
+                </div>
             </div>
             <div className="messageArea" ref={messageAreaRef}>
                 {list}

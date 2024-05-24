@@ -132,4 +132,8 @@
       /* position: fixed; */
     }
 
+    .modeToggle {
+      padding-top: 0.5rem;
+      padding-left: 0.5rem;
+    }
   }
