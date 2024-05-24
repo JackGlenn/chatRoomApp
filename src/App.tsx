@@ -4,6 +4,7 @@ import MessageForm from "./MessageForm.tsx";
 import { WSProvider } from "./WebSocketProvider.tsx";
 import { ThemeProvider } from "@/components/theme-provider.tsx";
 import { ModeToggle } from "./components/ui/mode-toggle.tsx";
+import Message from "./Message.tsx";
 
 // import TestComponent from "./TestComponent.jsx";
 
@@ -41,7 +42,9 @@ function App() {
     },);
 
     const list = messageList.map((val) => (
-        <div className="message">{val}</div>
+        <Message
+            message = {val}
+        />
     ));
 
     return(
