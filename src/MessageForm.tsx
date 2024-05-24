@@ -141,7 +141,6 @@ function MessageForm({dataTransfer}: dataTransferProp) {
 
     return(
         <div className="textAreaDiv">
-            {/* <form ref={messageFormRef} onSubmit={(e) => sendMessageHandler(e)}> */}
             <form ref={messageFormRef} className="messageForm">
                 <Textarea
                     ref={textAreaRef}
@@ -150,15 +149,6 @@ function MessageForm({dataTransfer}: dataTransferProp) {
                     onKeyDown={checkSubmit}
                     rows={1}
                 />
-                {/* <textarea
-                    className="textArea"
-                    ref={textAreaRef}
-                    value={message}
-                    onChange={handleChange}
-                    onKeyDown={checkSubmit}
-                    rows={1}
-                /> */}
-                {/* <input type="submit" value="Submit"/> */}
             </form>
             <div ref={textAreaScrollRef}></div>
         </div>
