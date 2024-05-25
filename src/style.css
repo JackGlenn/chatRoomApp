@@ -64,24 +64,18 @@
     }
 
     .topBar {
-      height: 10vh;
+      height: 7vh;
     }
 
     .messageArea {
       @apply space-y-4;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       margin: auto;
-      /* position: relative; */
-      /* align-items: center; */
-      height: 80vh;
+      height: 83vh;
       overflow-y: scroll;
-      /* overflow-x: clip; */
-      
       word-wrap: break-word;
       width: 80%
-      /* margin-right: 5rem; */
     }
 
     .messageForm {
