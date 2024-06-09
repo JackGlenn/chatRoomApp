@@ -17,7 +17,7 @@ const pool = new Pool({
     connectionTimeoutMillis: 2000,
 });
 
-console.log(process.env.USER);
+
 async function insertMessage(message: string) {
     const obj = JSON.parse(message);
     await pool.query(
