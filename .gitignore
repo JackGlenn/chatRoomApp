@@ -134,3 +134,4 @@ server.d.ts
 
 vite.config.js
 vite.config.d.ts
+Dockerfile

@@ -12,6 +12,7 @@ const pool = new Pool({
     host: "localhost",
     user: process.env.USER,
     database: process.env.DATABASE,
+    password: process.env.PASS,
     //   max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
