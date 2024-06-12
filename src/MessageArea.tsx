@@ -1,6 +1,6 @@
 import Message from "./Message.tsx";
 import MessageForm from "./MessageForm.tsx";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 
 export default function MessageArea() {
     const [messageList, setMessageList] = useState<string[]>([]);
@@ -35,11 +35,11 @@ export default function MessageArea() {
         checkScrollUpdate()
     },);
 
-    const list = messageList.map((val) =>
+    const list = useMemo(() => messageList.map((val) =>
         <Message
             message = {val}
         />
-    );
+    ), [messageList]);
 
     return (
         <div>
