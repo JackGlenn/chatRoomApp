@@ -42,21 +42,20 @@ const port = process.env.PORT;
 
 const wsServer = new WebSocketServer({ port: parseInt(process.env.WSPORT!) });
 
-const clients: WebSocket[] = [];
 
 wsServer.on("connection", (socket) => {
     loadTenMessages(socket);
-    clients.push(socket);
+    console.log("number of connected clients: ", wsServer.clients.size);
     socket.on("message", (message) => {
         const convertedMessage: string = message.toString();
         insertMessage(convertedMessage);
         const messageArray: string[] = [];
         messageArray.push(JSON.parse(convertedMessage));
         const toSend = JSON.stringify(messageArray);
-        for (let i = 0; i < clients.length; i++) {
-            console.log(toSend);
-            clients[i].send(toSend);
-        }
+        wsServer.clients.forEach((client) => {
+            console.log("sending: ", toSend);
+            client.send(toSend);
+        });
     });
 });
 
