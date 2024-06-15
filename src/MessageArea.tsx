@@ -1,6 +1,6 @@
 import Message from "./Message.tsx";
 import MessageForm from "./MessageForm.tsx";
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 
 export default function MessageArea() {
     const [messageList, setMessageList] = useState<string[]>([]);
@@ -8,7 +8,7 @@ export default function MessageArea() {
     const messageAreaBottomRef = useRef<HTMLDivElement>(null);
     const [atBottomBool, setAtBottomBool] = useState<boolean>(true);
 
-    const dataTransfer = (message: string[]) => {
+    const dataTransfer = useCallback((message: string[]) => {
         console.log("in data transfer, appending: " + message);
         setMessageList(messageList.concat(message));
         if (!messageAreaRef.current) throw Error("messageAreaRef is not assigned");
@@ -17,7 +17,7 @@ export default function MessageArea() {
         } else {
             setAtBottomBool(false);
         }
-    }
+    }, [messageList]);
 
     const checkScrollUpdate = () => {
         if (!messageAreaRef.current) throw Error("messageAreaRef is not assigned");
