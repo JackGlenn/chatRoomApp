@@ -1,4 +1,4 @@
-import { useState, useRef , KeyboardEvent, ChangeEvent, useEffect} from 'react';
+import { useState, useRef , KeyboardEvent, ChangeEvent, useEffect, useCallback} from 'react';
 // import { WSContext } from './WebSocketProvider';
 import { useSocket } from './WebSocketProvider.tsx';
 
@@ -23,26 +23,31 @@ function MessageForm({dataTransfer}: dataTransferProp) {
     // console.log("grabbed ref to socket");
 
     // TODO make this scrolling better
-    // useEffect(() => {
-        // if (!textAreaScrollRef.current) throw Error("text are scroll ref not assigned")
-        // textAreaScrollRef.current.scrollIntoView({ behavior: "smooth"});
-        // console.log("here")
-        // window.scrollTo(0, document.body.scrollHeight);
-    // },);
-
-    const messageReceiver = (message: MessageEvent) => {
+    
+    const messageReceiver = useCallback((message: MessageEvent) => {
         console.log(typeof(message.data));
         console.log("message data: " + message.data);
         const messageArray = JSON.parse(message.data);
         const newArray = []
         for (let i = 0; i < messageArray.length; i++) {
             newArray.push(messageArray[i]["message_text"]);
+            }
+            console.log(newArray);
+            // Reverse as most recent is on top in sent arrays
+            dataTransfer(newArray.reverse());
+    },[dataTransfer]);
+
+    useEffect(() => {
+        // if (!textAreaScrollRef.current) throw Error("text are scroll ref not assigned")
+        // textAreaScrollRef.current.scrollIntoView({ behavior: "smooth"});
+        // console.log("here")
+        // window.scrollTo(0, document.body.scrollHeight);
+
+        socket.addEventListener("message", messageReceiver);
+        return () => {
+            socket.removeEventListener("message", messageReceiver);
         }
-        console.log(newArray);
-        // Reverse as most recent is on top in sent arrays
-        dataTransfer(newArray.reverse());
-    }
-    socket.addEventListener("message", messageReceiver);
+    },[socket, messageReceiver]);
 
     const checkSubmit = (event: KeyboardEvent) => {
         // console.log(event.keyCode);
