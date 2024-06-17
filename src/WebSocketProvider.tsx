@@ -26,7 +26,7 @@ export const WSProvider = ({children}: childProp) => {
             socket.removeEventListener("close", onClose);
             socket.close();
         }
-    }, [socket, setSocket]);
+    }, [socket]);
 
     return (
         <WSContext.Provider value={socket}>{children}</WSContext.Provider>
