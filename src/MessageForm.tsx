@@ -23,12 +23,12 @@ function MessageForm({dataTransfer}: dataTransferProp) {
     // console.log("grabbed ref to socket");
 
     // TODO make this scrolling better
-    useEffect(() => {
+    // useEffect(() => {
         // if (!textAreaScrollRef.current) throw Error("text are scroll ref not assigned")
         // textAreaScrollRef.current.scrollIntoView({ behavior: "smooth"});
         // console.log("here")
-        window.scrollTo(0, document.body.scrollHeight);
-    },);
+        // window.scrollTo(0, document.body.scrollHeight);
+    // },);
 
     const messageReceiver = (message: MessageEvent) => {
         console.log(typeof(message.data));
@@ -62,7 +62,11 @@ function MessageForm({dataTransfer}: dataTransferProp) {
         console.log("height: ", textAreaRef.current.offsetHeight)
         textAreaRef.current.style.height = "0px";
         const scrollHeight = textAreaRef.current.scrollHeight;
-        textAreaRef.current.style.height = `${scrollHeight}px`;
+        if (scrollHeight > window.innerHeight * 0.4) {
+            textAreaRef.current.style.height = `${window.innerHeight * 0.4}px`;
+        } else {
+            textAreaRef.current.style.height = `${scrollHeight}px`;
+        }
 
     }
     // TODO make this work
@@ -148,9 +152,9 @@ function MessageForm({dataTransfer}: dataTransferProp) {
                     onChange={handleChange}
                     onKeyDown={checkSubmit}
                     rows={1}
-                />
+                    />
             </form>
-            <div ref={textAreaScrollRef}></div>
+        <div ref={textAreaScrollRef}></div>
         </div>
     );
 }

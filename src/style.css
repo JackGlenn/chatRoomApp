@@ -67,6 +67,12 @@
       height: 7vh;
     }
 
+    .mainContent {
+      display: flex;
+      flex-direction: column;
+      height: 93vh
+    }
+
     .messageArea {
       @apply space-y-4;
       display: flex;
@@ -75,11 +81,8 @@
       height: 83vh;
       overflow-y: scroll;
       word-wrap: break-word;
-      width: 80%
-    }
-
-    .messageForm {
-      flex-grow: 1;
+      width: 80%;
+      flex: 1 1;
     }
 
     .textAreaDiv {
@@ -88,15 +91,26 @@
       /* flex-grow: 1; */
       align-items: center;
       /* height: 10vh; */
-      height: 10vh;
+      /* height: 10vh; */
       width: 80%;
       margin: auto;
-/* 
-      margin-top: 2rem;
-      margin-left: 5rem;
-      margin-right: 5rem;
-      padding-bottom: 2rem; */
+      /* position: relative; */
 
+      /* margin-top: 2rem; */
+      /* margin-left: 5rem; */
+      /* margin-right: 5rem; */
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      /* overflow: auto; */
+
+      align-self: flex-end;
+      /* overflow-y:inherit; */
+    }
+
+    .messageForm {
+      flex: 1;
+      /* overflow-y: scroll; */
+      /* overflow-y: scroll; */
     }
 
     .entry {
@@ -104,26 +118,10 @@
       height: 100%;
     }
 
-    /* label {
-      width: 75%;
-      height: 25%;
-    } */
-
     .message {
       @apply flex w-max max-w-[100%] flex-col gap-2 rounded-lg px-3 py-2 text-sm bg-primary text-primary-foreground;
       white-space: pre-line;
       /* margin-right: 3rem; */
-    }
-
-    .textArea {
-      /* margin-top: auto; */
-      width: 100%;
-      /* margin-bottom: 3rem; */
-      resize: none;
-      /* padding-bottom: 5rem; */
-      /* margin-left: 5rem;
-      margin-right: 5rem; */
-      /* position: fixed; */
     }
 
     .modeToggle {

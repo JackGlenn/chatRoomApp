@@ -16,8 +16,9 @@ export default function MessageArea() {
                 throw Error("messageAreaRef is not assigned");
             if (
                 messageAreaRef.current.scrollHeight -
-                    Math.round(messageAreaRef.current.scrollTop) ===
-                messageAreaRef.current.clientHeight
+                    Math.round(messageAreaRef.current.scrollTop) -
+                    messageAreaRef.current.clientHeight <
+                20
             ) {
                 setAtBottomBool(true);
             } else {
@@ -34,7 +35,6 @@ export default function MessageArea() {
             messageAreaRef.current.scrollHeight -
                 Math.round(messageAreaRef.current.scrollTop)
         );
-        console.log(messageAreaRef.current.offsetHeight);
         console.log(atBottomBool);
         if (atBottomBool) {
             console.log("should scroll");
@@ -62,7 +62,7 @@ export default function MessageArea() {
     );
 
     return (
-        <div>
+        <div className="mainContent">
             <div className="messageArea" ref={messageAreaRef}>
                 {list}
                 <div ref={messageAreaBottomRef} />
