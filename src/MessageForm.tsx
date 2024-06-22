@@ -9,8 +9,14 @@ import {
 import { useSocket } from "./WebSocketProvider.tsx";
 import { Textarea } from "@/components/ui/textarea";
 
+// TODO figure out how to not have this type defined both here and in MessageArea.tsx
+type messageData = {
+    message_text: string;
+    post_time: string;
+}
+
 interface dataTransferProp {
-    dataTransfer: (message: string[]) => void;
+    dataTransfer: (message: messageData[]) => void;
 }
 
 function MessageForm({ dataTransfer }: dataTransferProp) {
@@ -25,15 +31,9 @@ function MessageForm({ dataTransfer }: dataTransferProp) {
     const messageReceiver = useCallback(
         (message: MessageEvent) => {
             console.log(typeof message.data);
-            console.log("message data: \n" + message.data);
             const messageArray = JSON.parse(message.data);
-            const newArray = [];
-            for (let i = 0; i < messageArray.length; i++) {
-                newArray.push(messageArray[i]["message_text"]);
-            }
-            console.log(newArray);
-            // Reverse as most recent is on top in sent arrays
-            dataTransfer(newArray.reverse());
+            console.log("message array ",messageArray)
+            dataTransfer(messageArray.reverse());
         },
         [dataTransfer]
     );
@@ -73,7 +73,7 @@ function MessageForm({ dataTransfer }: dataTransferProp) {
             console.log("socket ready state open: ", socket.readyState);
             const toSend = {
                 message_text: message,
-                time_stamp: new Date().toISOString(),
+                post_time: new Date().toISOString(),
             };
             socket.send(JSON.stringify(toSend));
             setMessage("");

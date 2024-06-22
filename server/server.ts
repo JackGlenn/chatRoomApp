@@ -23,7 +23,7 @@ async function insertMessage(message: string) {
     const obj = JSON.parse(message);
     await pool.query(
         "INSERT INTO messages VALUES(DEFAULT, $1, $2, $3, $4) RETURNING *",
-        [obj.message_text, obj.time_stamp, 1, 1]
+        [obj.message_text, obj.post_time, 1, 1]
     );
 }
 
