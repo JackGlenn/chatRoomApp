@@ -118,11 +118,10 @@
       height: 100%;
     }
 
-    .message {
-      @apply flex w-max max-w-[100%] flex-col gap-2 rounded-lg px-3 py-2 text-sm bg-primary text-primary-foreground;
+    /* .message {
+      @apply flex flex-row w-max max-w-[100%] gap-2 rounded-lg px-3 py-2 text-sm bg-primary text-primary-foreground;
       white-space: pre-line;
-      /* margin-right: 3rem; */
-    }
+    } */
 
     .modeToggle {
       padding-top: 0.5rem;
