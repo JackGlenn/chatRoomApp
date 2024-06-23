@@ -2,7 +2,7 @@ import Message from "./Message.tsx";
 import MessageForm from "./MessageForm.tsx";
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 
-type messageData = {
+export type messageData = {
     message_text: string;
     post_time: string;
 }

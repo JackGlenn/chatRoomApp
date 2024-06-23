@@ -8,12 +8,8 @@ import {
 } from "react";
 import { useSocket } from "./WebSocketProvider.tsx";
 import { Textarea } from "@/components/ui/textarea";
+import type { messageData } from "./MessageArea.tsx";
 
-// TODO figure out how to not have this type defined both here and in MessageArea.tsx
-type messageData = {
-    message_text: string;
-    post_time: string;
-}
 
 interface dataTransferProp {
     dataTransfer: (message: messageData[]) => void;
