@@ -1,9 +1,9 @@
 import express from "express";
 import { WebSocket, WebSocketServer } from "ws";
-import path from "path";
+// import path from "path";
 import "dotenv/config";
 
-import { fileURLToPath } from "url";
+// import { fileURLToPath } from "url";
 
 import pg from "pg";
 const { Pool } = pg;
@@ -41,8 +41,8 @@ async function loadTenMessages(socket: WebSocket) {
     }
 }
 
-const __filename = fileURLToPath(import.meta.url);
-const root = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const root = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT;
