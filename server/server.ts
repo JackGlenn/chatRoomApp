@@ -18,7 +18,6 @@ const pool = new Pool({
     connectionTimeoutMillis: 2000,
 });
 
-
 async function insertMessage(message: string) {
     const obj = JSON.parse(message);
     await pool.query(
@@ -60,6 +59,7 @@ wsServer.on("connection", (socket) => {
 });
 
 app.use(express.static("dist", { index: false }));
+app.use("/res", express.static("res"));
 
 app.get("/", (request, response) => {
     const options = {
@@ -71,7 +71,6 @@ app.get("/", (request, response) => {
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 });
-
 
 // TODO
 // Create user, query user id from username for sending when sending a message
