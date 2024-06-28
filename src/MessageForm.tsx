@@ -10,7 +10,6 @@ import { useSocket } from "./WebSocketProvider.tsx";
 import { Textarea } from "@/components/ui/textarea";
 import type { messageData } from "./MessageArea.tsx";
 
-
 interface dataTransferProp {
     dataTransfer: (message: messageData[]) => void;
 }
@@ -28,7 +27,7 @@ function MessageForm({ dataTransfer }: dataTransferProp) {
         (message: MessageEvent) => {
             console.log(typeof message.data);
             const messageArray = JSON.parse(message.data);
-            console.log("message array ",messageArray)
+            console.log("message array ", messageArray);
             dataTransfer(messageArray.reverse());
         },
         [dataTransfer]

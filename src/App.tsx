@@ -11,25 +11,25 @@ import Login from "./Login.tsx";
 // import TestComponent from "./TestComponent.jsx";
 
 function App() {
-    return(
+    return (
         <main>
             <ThemeProvider>
-            <WSProvider>
-            <div className="topBar">
-                <div className="modeToggle">
-                <ModeToggle/>
-                </div>
-            </div>
-            <Login/>
-            {/* <div className="messageArea" ref={messageAreaRef}>
+                <WSProvider>
+                    <div className="topBar">
+                        <div className="modeToggle">
+                            <ModeToggle />
+                        </div>
+                    </div>
+                    <Login />
+                    {/* <div className="messageArea" ref={messageAreaRef}>
                 {list}
                 <div ref={messageAreaBottomRef} />
             </div>
             <MessageForm dataTransfer={dataTransfer}/> */}
-            </WSProvider>
+                </WSProvider>
             </ThemeProvider>
         </main>
-    )
+    );
 }
 
 export default App;

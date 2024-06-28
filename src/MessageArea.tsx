@@ -6,7 +6,7 @@ export type messageData = {
     message_id: number;
     message_text: string;
     post_time: string;
-}
+};
 
 export default function MessageArea() {
     const [messageList, setMessageList] = useState<messageData[]>([]);
@@ -65,7 +65,13 @@ export default function MessageArea() {
     const list = useMemo(
         () =>
             messageList.map((messageDataArray: messageData) => (
-                <Message message={messageDataArray.message_text} username={new Date(messageDataArray.post_time).toLocaleString()} key={messageDataArray.message_id} />
+                <Message
+                    message={messageDataArray.message_text}
+                    username={new Date(
+                        messageDataArray.post_time
+                    ).toLocaleString()}
+                    key={messageDataArray.message_id}
+                />
             )),
         [messageList]
     );
