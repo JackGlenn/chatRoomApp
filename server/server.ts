@@ -22,7 +22,7 @@ async function insertMessage(message: string) {
     const obj = JSON.parse(message);
     try {
         return pool.query(
-            "INSERT INTO messages VALUES(DEFAULT, $1, $2, $3, $4) RETURNING message_id, message_text, post_time",
+            "INSERT INTO messages VALUES(DEFAULT, $1, $2, $3, $4) RETURNING message_id, message_text, post_time, user_id",
             [obj.message_text, obj.post_time, 1, 1]
         );
     } catch (err) {
