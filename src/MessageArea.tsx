@@ -3,6 +3,7 @@ import MessageForm from "./MessageForm.tsx";
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 
 export type messageData = {
+    message_id: number;
     message_text: string;
     post_time: string;
 }
@@ -15,12 +16,9 @@ export default function MessageArea() {
 
     const dataTransfer = useCallback(
         (messages: messageData[]) => {
-            // console.log("in data transfer, appending: " + messages);
+            // !! Debug print loop
             for (let i = 0; i < messages.length; i++) {
                 console.log(messages[i]);
-                let date = new Date(messages[i].post_time);
-                console.log(date.getDay());
-                console.log(date.toLocaleString());
             }
             setMessageList(messageList.concat(messages));
             if (!messageAreaRef.current)
@@ -62,14 +60,12 @@ export default function MessageArea() {
     useEffect(() => {
         checkScrollUpdate();
     });
-    // let date = new Date(messages[i].post_time);
-    // console.log(date.getDay());
-    // console.log(date.toLocaleString());
-    // TODO make sure key id isnt created on every render
+
+    // TODO maybe make the keys UUIDS rather than the pk for the message.
     const list = useMemo(
         () =>
             messageList.map((messageDataArray: messageData) => (
-                <Message message={messageDataArray.message_text} username={new Date(messageDataArray.post_time).toLocaleString()} key={crypto.randomUUID()} />
+                <Message message={messageDataArray.message_text} username={new Date(messageDataArray.post_time).toLocaleString()} key={messageDataArray.message_id} />
             )),
         [messageList]
     );
