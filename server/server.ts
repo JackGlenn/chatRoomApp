@@ -58,15 +58,16 @@ wsServer.on("connection", (socket) => {
     });
 });
 
-app.use(express.static("dist", { index: false }));
+// app.use(express.static("dist", { index: false }));
+app.use(express.static("dist"));
 app.use("/res", express.static("res"));
 
-app.get("/", (request, response) => {
-    const options = {
-        root: root,
-    };
-    response.sendFile("./dist/index.html", options);
-});
+// app.get("/", (request, response) => {
+//     const options = {
+//         root: root,
+//     };
+//     response.sendFile("./dist/index.html", options);
+// });
 
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
